@@ -14,101 +14,84 @@ struct Etudiant {
 };
 typedef struct Etudiant *etudiants;
 
-struct Etudiant *ajout(struct Etudiant *etudiant, int numCarte, char nom[10],
-                       char prenom[10], char dateN[10], char address[10],
-                       int notes[13], int coef[13], float moyenne) {
-
+void creationEtudiant(struct Etudiant *etudiants) {
+  int i;
+  etudiants = (struct Etudiant *)malloc(sizeof(struct Etudiant));
+  printf("donner le numero de la carte etudiant \n");
+  scanf("%d", &etudiants->numCarte);
+  printf("donner le nom: \n");
+  scanf("%s", etudiants->nom);
+  printf("donner le prenom: \n");
+  scanf("%s", etudiants->prenom);
+  printf("donner la date de naissiance: \n");
+  scanf("%s", etudiants->dateN);
+  printf("donner l adresse: \n");
+  scanf("%s", etudiants->address);
+  printf("donner les notes: \n");
+  for (i = 0; i < 13; i++) {
+    printf("donner la note %d\n", i);
+    scanf("%f", &etudiants->notes[i]);
+  }
+  printf("donner respectivement les coefficients\n");
+  for (i = 0; i < 13; i++) {
+    printf("donner le coefficient %d\n", i);
+    scanf("%f", &etudiants->coef[i]);
+  }
+  etudiants->next = NULL;
+}
+void ajoutEtudiants(struct Etudiant *etudiant) {
   struct Etudiant *nouvelEtudiant;
   nouvelEtudiant = (struct Etudiant *)malloc(sizeof(struct Etudiant));
-  nouvelEtudiant->numCarte = numCarte;
-  nouvelEtudiant->nom[10] = nom[10];
-  nouvelEtudiant->prenom[10] = prenom[10];
-  nouvelEtudiant->dateN[10] = dateN[10];
-  nouvelEtudiant->address[50] = address[50];
-  nouvelEtudiant->notes[13] = notes[13];
-  nouvelEtudiant->coef[13] = coef[13];
-  nouvelEtudiant->moyenne = moyenne;
-  nouvelEtudiant->next = NULL;
-
-  if (etudiant == NULL) {
-    return nouvelEtudiant;
-  } else {
-    struct Etudiant *temp = etudiant;
-    while (temp->next != NULL) {
-      temp = temp->next;
-    }
-    temp->next = nouvelEtudiant;
-    return etudiant;
-  }
+  creationEtudiant(nouvelEtudiant);
+  nouvelEtudiant->next = etudiant;
+  nouvelEtudiant = etudiant;
 }
 
 void affichage(struct Etudiant *etudiant) {
-  struct Etudiant *temp;
-  temp = etudiant;
+  struct Etudiant *nouvelEtudiant;
+  int i;
+  nouvelEtudiant = etudiant;
+  if (nouvelEtudiant == NULL) {
+    printf("liste des etudiants est vide");
+  } else {
+    while (nouvelEtudiant != NULL) {
+      printf("numero de la carte: %d\n", nouvelEtudiant->numCarte);
+      printf("nom: %s\n", nouvelEtudiant->nom);
+      printf("prenom: %s\n", nouvelEtudiant->prenom);
+      printf("date de naissance: %s\n", nouvelEtudiant->dateN);
+      printf("addresse: %s\n", nouvelEtudiant->address);
+      printf("notes matieres: \n");
+      for (i = 0; i < 13; i++) {
+        printf("note %d: %f\n", i, nouvelEtudiant->notes[i]);
+      }
+      printf("les coefficients respectivement au notes:\n");
+      for (i = 0; i < 13; i++) {
+        printf("coefficient %d: %f", i, nouvelEtudiant->coef[i]);
+      }
 
-  while (temp != NULL) {
-    printf("%d", temp->numCarte);
-    printf("%s", temp->nom);
-    printf("%s", temp->prenom);
-    printf("%s", temp->dateN);
-    printf("%s", temp->address);
-    printf("%f", temp->notes);
-    printf("%f", temp->coef);
-    printf("%f", temp->moyenne);
-    temp = temp->next;
+      nouvelEtudiant = nouvelEtudiant->next;
+    }
   }
-  printf("\n");
 }
 
 void main() {
-  int i;
-  int fin = 1;
   char choix;
   struct Etudiant *etudiants;
-  int numCarte;
-  char nom[10];
-  char prenom[10];
-  char dateN[10];
-  char address[20];
-  int notes[13];
-  int coef[13];
-  float moyenne;
-
+  printf("tapez le numero de la tache\n");
+  printf("1- Ajout\n");
+  printf("2- Suppression\n");
+  printf("3- Affichage\n");
+  printf("4- Calcul moyenne\n");
+  printf("5- affichage avec la mention\n");
+  printf("appuyer sur CTRL+C pour quitter");
+  printf("entrer votre choix");
   do {
-    printf("tapez le numero de la tache\n");
-    printf("1- Ajout\n");
-    printf("2- Suppression\n");
-    printf("3- Affichage\n");
-    printf("4- Calcul moyenne\n");
-    printf("5- affichage avec la mention\n");
-    printf("appuyer sur q pour quitter");
-    printf("entrer votre choix");
+    printf("tapez le numéro de la tache:\n");
     scanf("%c", &choix);
     switch (choix) {
 
     case '1':
-      printf("donner le numero de la carte etudiant\n");
-      scanf("%d", &numCarte);
-      printf("donner le nom\n");
-      scanf("%s", nom);
-      printf("donner le prenom\n");
-      scanf("%s", prenom);
-      printf("donner la date de naissance\n");
-      scanf("%s", dateN);
-      printf("donner l\'addresse \n");
-      scanf("%s", address);
-      printf("donner les notes\n");
-      for (i = 0; i < 13; i++) {
-        printf("note %d\n", i);
-        scanf("%f", &notes[i]);
-      }
-      printf("donner les coefficients: \n");
-      for (i = 0; i < 13; i++) {
-        printf("coef %d:\n", i);
-        scanf("%f", &coef[i]);
-      }
-      etudiants = ajout(etudiants, numCarte, nom, prenom, dateN, address, notes,
-                        coef, moyenne);
+      ajoutEtudiants(etudiants);
       break;
 
     case '2':
