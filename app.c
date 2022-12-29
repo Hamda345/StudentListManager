@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#define nb 5
 struct Etudiant {
   int numCarte;
   char nom[10];
@@ -12,9 +12,9 @@ struct Etudiant {
   float moyenne;
   struct Etudiant *next;
 };
-typedef struct Etudiant *etudiants;
+// typedef struct Etudiant *etudiants;
 
-void creationEtudiant(struct Etudiant *etudiants) {
+struct Etudiant *creationEtudiant(struct Etudiant *etudiants) {
   int i;
   etudiants = (struct Etudiant *)malloc(sizeof(struct Etudiant));
   printf("donner le numero de la carte etudiant \n");
@@ -28,31 +28,32 @@ void creationEtudiant(struct Etudiant *etudiants) {
   printf("donner l adresse: \n");
   scanf("%s", etudiants->address);
   printf("donner les notes: \n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < nb; i++) {
     printf("donner la note %d\n", i);
     scanf("%f", &etudiants->notes[i]);
   }
   printf("donner respectivement les coefficients\n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < nb; i++) {
     printf("donner le coefficient %d\n", i);
     scanf("%f", &etudiants->coef[i]);
   }
   etudiants->next = NULL;
+  return etudiants;
 }
-void ajoutEtudiants(struct Etudiant *etudiant) {
+void ajoutEtudiants(struct Etudiant *letudiant) {
   struct Etudiant *nouvelEtudiant;
-  nouvelEtudiant = (struct Etudiant *)malloc(sizeof(struct Etudiant));
-  creationEtudiant(nouvelEtudiant);
-  nouvelEtudiant->next = etudiant;
-  nouvelEtudiant = etudiant;
+  // nouvelEtudiant = (struct Etudiant *)malloc(sizeof(struct Etudiant));
+  nouvelEtudiant = creationEtudiant(nouvelEtudiant);
+  nouvelEtudiant->next = letudiant;
+  letudiant = nouvelEtudiant;
 }
 
 void affichage(struct Etudiant *etudiant) {
   struct Etudiant *nouvelEtudiant;
   int i;
   nouvelEtudiant = etudiant;
-  if (nouvelEtudiant == NULL) {
-    printf("liste des etudiants est vide");
+  if (nouvelEtudiant->next == NULL) {
+    printf("liste des etudiants est vide\n");
   } else {
     while (nouvelEtudiant != NULL) {
       printf("numero de la carte: %d\n", nouvelEtudiant->numCarte);
@@ -61,17 +62,18 @@ void affichage(struct Etudiant *etudiant) {
       printf("date de naissance: %s\n", nouvelEtudiant->dateN);
       printf("addresse: %s\n", nouvelEtudiant->address);
       printf("notes matieres: \n");
-      for (i = 0; i < 13; i++) {
+      for (i = 0; i < nb; i++) {
         printf("note %d: %f\n", i, nouvelEtudiant->notes[i]);
       }
       printf("les coefficients respectivement au notes:\n");
-      for (i = 0; i < 13; i++) {
-        printf("coefficient %d: %f", i, nouvelEtudiant->coef[i]);
+      for (i = 0; i < nb; i++) {
+        printf("coefficient %d: %f\n", i, nouvelEtudiant->coef[i]);
       }
 
       nouvelEtudiant = nouvelEtudiant->next;
     }
   }
+  printf("\n");
 }
 
 void main() {
